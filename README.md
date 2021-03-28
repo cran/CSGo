@@ -6,6 +6,11 @@
 <br>
 
 <!-- badges: start -->
+
+[![CRAN
+status](https://www.r-pkg.org/badges/version/CSGo)](https://CRAN.R-project.org/package=CSGo)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 R client for accessing Steam’s REST API specifically for the
@@ -27,9 +32,15 @@ Terms of Use](https://steamcommunity.com/dev/apiterms).
 
 ## Installation
 
-The `CSGo` package still doesn’t have released on CRAN, but you can use
-the development version from
-[GitHub](https://github.com/adsoncostanzifilho/CSGo) with:
+To get the current released version from
+[CRAN](https://CRAN.R-project.org/package=CSGo):
+
+``` r
+install.packages("CSGo")
+```
+
+To get the current development version from
+[GitHub](https://github.com/adsoncostanzifilho/CSGo):
 
 ``` r
 # install.packages("devtools")
@@ -51,11 +62,11 @@ your own CSGo data as well as your friends’ data.
 library(CSGo)
 
 # to get my own statistics
-my_stats <- get_stats_user(api_key = 'your_key',user_key = '76561198263364899')
+my_stats <- get_stats_user(api_key = 'your_key', user_id = '76561198263364899')
 
-# to get my the statistics of all my "public" friends
-friends_stats <- get_stats_friends(api_key = 'your_key',user_key = '76561198263364899')
+# to get the statistics of all my "public" friends
+friends_stats <- get_stats_friends(api_key = 'your_key', user_id = '76561198263364899')
 ```
 
-*PS*: Don’t worry, the function `get_stats_friends` will only collect
-the data of your friends with “Public” status.
+*PS*: Take a look at the `vignette("usecase", package = "CSGo")` to get
+some ideas.
