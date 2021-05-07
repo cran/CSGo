@@ -12,6 +12,8 @@
 #'
 #' PS: The user should have a public status.
 #'
+#' @param n_return numeric indicating the number of friends to return, to return all use n_return = "all" (the default is "all").
+#'
 #' @return a list of two data frames
 #'
 #' friends_stats: data frame with all the CS Go statistics of all public friends of the user ID.
@@ -24,11 +26,14 @@
 #' \dontrun{
 #' ## It is necessary to fill the "api_key" parameter to run the example
 #'
+#' # set the "plan" to collect the data in parallel!!!!
+#' future::plan(future::multisession, workers = parallel::detectCores())
+#'
 #' fr_list <- get_stats_friends(api_key = 'XXX', user_id = '76561198263364899')
 #' fr_list$friends_stats
 #' fr_list$friends
 #' }
-get_stats_friends <- function(api_key, user_id)
+get_stats_friends <- function(api_key, user_id, n_return = 'all')
 {
 
   # COLLECT THE PROFILE BY USER NAME OR BY USER ID
@@ -41,69 +46,65 @@ get_stats_friends <- function(api_key, user_id)
     user_id <- as.character(user_id)
   }
 
-  # GETING THE FRIENDS IDs
+  # Get Friends IDs
   friend_list <- csgo_api_friend(api_key, user_id)
+
+  # SPLITING THE IDs by 100 (each query allows max 100 user_id)
+  f_steamid <- split(friend_list$steamid, ceiling(seq_along(friend_list$steamid)/100))
+
 
   # VERIFY IF THE USER IS PUBLIC OR NOT
   print("Public friends check..")
 
-  # auxiliary function to create/check if the friend has public data or not
-  check_public <- function(steamid, ...)
-  {
-    df_return <- data.frame(
-      steamid = steamid,
-      personaname = NA,
-      public = NA,
-      profileurl = NA,
-      avatarfull = NA
-    )
+  f_profile <- furrr::future_map2_dfr(
+    .x = api_key,
+    .y = f_steamid,
+    .f = purrr::possibly(csgo_api_profile,"Cant retrieve data")
+  )
 
-    temp <- csgo_api_profile(api_key, steamid)
-
-    if(("communityvisibilitystate" %in% colnames(temp)))
-    {
-      df_return$public <- ifelse(
-        as.numeric(temp$communityvisibilitystate) > 1,
+  # Verify public friends
+  f_profile <- f_profile %>%
+    dplyr::mutate(
+      public = ifelse(
+        as.numeric(f_profile$communityvisibilitystate) > 1,
         "Public",
         "Not Public"
       )
-      df_return$personaname <- temp$personaname
-      df_return$profileurl <- temp$profileurl
-      df_return$avatarfull <- temp$avatarfull
+    ) %>%
+    dplyr::left_join(friend_list, by = c("steamid" = "steamid"))
 
-    }
-    else{
-      df_return$public <- "Not Public"
-    }
-    return(df_return)
-  }
-
-  friend_list <- purrr::map_df(.x = friend_list$steamid, .f = check_public)
-
-  friend_list2 <- friend_list %>%
+  friend_list2 <- f_profile %>%
     dplyr::filter(public == "Public")
 
-  # GETING THE STATS OF EACH FRIEND
+  # N FRIENDS TO RETURN
+  if(is.numeric(n_return) & nrow(friend_list2) >= n_return)
+  {
+    friend_list2 <- friend_list2 %>%
+      dplyr::top_n(n = n_return, wt = friend_list2$friend_since)
+  }
+
   print("Pulling friends stats..")
+
   return_list <- list()
 
   if(nrow(friend_list2) > 0)
   {
-    db_friends_complete <- purrr::map2_df(
+    db_friends_complete <- furrr::future_map2_dfr(
       .x = api_key,
       .y = as.character(friend_list2$steamid),
-      .f = get_stats_user
+      .f = purrr::possibly(get_stats_user,"Cant retrieve data")
     )
 
     db_friends_complete <- db_friends_complete %>%
       dplyr::filter(!is.na(value))
 
     return_list$friends_stats <- db_friends_complete
-    return_list$friends <- friend_list
+    return_list$friends <- friend_list2
   }else{
     return_list$friends_stats <- 'NO PUBLIC FRIENDS'
-    return_list$friends <- friend_list
+    return_list$friends <- friend_list2
   }
+
 
   return(return_list)
 

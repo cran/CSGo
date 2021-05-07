@@ -26,11 +26,19 @@
     </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -160,7 +168,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Try to run it filling your own API key:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CSGo)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">csgo_api_profile</span>(<span class="at">key =</span> <span class="st">&#39;your_key&#39;</span>, <span class="at">user_id =</span> <span class="st">&#39;76561198263364899&#39;</span>)</span></code></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">csgo_api_profile</span>(<span class="at">api_key =</span> <span class="st">&#39;your_key&#39;</span>, <span class="at">user_id =</span> <span class="st">&#39;76561198263364899&#39;</span>)</span></code></pre></div>
 </div>
 <div id="finding-the-users" class="section level2">
 <h2>Finding the Users</h2>
@@ -172,9 +180,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>IMPORTANT</strong>: The steam profile should have the <em>“Public”</em> status for you be able to get specific information like Achievements and Statistics.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CSGo)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">csgo_api_profile</span>(<span class="at">key =</span> <span class="st">&#39;your_key&#39;</span>, <span class="at">user_id =</span> <span class="st">&#39;76561198263364899&#39;</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">csgo_api_profile</span>(<span class="at">key =</span> <span class="st">&#39;your_key&#39;</span>, <span class="at">user_id =</span> <span class="st">&#39;generalcapivara&#39;</span>, <span class="at">name =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p>That’s it!</p>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">csgo_api_profile</span>(<span class="at">api_key =</span> <span class="st">&#39;your_key&#39;</span>, <span class="at">user_id =</span> <span class="st">&#39;76561198263364899&#39;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">csgo_api_profile</span>(<span class="at">api_key =</span> <span class="st">&#39;your_key&#39;</span>, <span class="at">user_id =</span> <span class="st">&#39;generalcapivara&#39;</span>, <span class="at">name =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>That’s it!!!</p>
 </div>
 </div>
 

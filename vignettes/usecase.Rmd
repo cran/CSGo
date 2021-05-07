@@ -16,13 +16,13 @@ knitr::opts_chunk$set(
 
 This vignette covers how to use some functions from the `CSGo` package in a use case format.
 
-## Pulling Data
+## Data Extraction and Analysis
 
 The first step to use the `CSGo` package is to have your own credentials (API key) to pull the CSGo data from the Steam API. For more information about how to get your own API Key run in your R `vignette("auth", package = "CSGo")`.
 
 Now that you already have your *API Key* you should be able to collect your own CSGo data as well as your friends' data. I hope my friend [Rodrigo](https://github.com/Rodrigo-Fontoura) doesn't mind us playing with his data (he is the '76561198263364899')!
 
-First let's collect his CSGo statistics:
+First let's pull his CSGo statistics:
 
 ```{r eval = FALSE}
 library(CSGo)
@@ -71,7 +71,7 @@ rodrigo_weapon_kill %>%
 
 ```
 
-<p align="center"><img src="img/kills_weapon.png"  width="100%" alt="key"></p>
+<p align="center"><img src="img/kills_weapon.png"  width="100%" alt="kills_weapon"></p>
 
 So, these are the top 10 weapons by kills, but.. What about the efficiency? Is the **ak47** the Rodrigo's more efficient weapon? First, let's define "efficiency":
 
@@ -139,6 +139,6 @@ rodrigo_efficiency %>%
 
 ```
 
-<p align="center"><img src="img/weapon_effic.png"  width="100%" alt="key"></p>
+<p align="center"><img src="img/weapon_effic.png"  width="100%" alt="weapon_effic"></p>
 
 In conclusion, I would advise Rodrigo to use the **awp** in his next games, because this weapon presented the best efficiency in terms of **shots to kill**, **shots to hit**, and **hits to kill**. But we definitely need more shots with this weapon to see if this efficiency remains.. hahahaha
